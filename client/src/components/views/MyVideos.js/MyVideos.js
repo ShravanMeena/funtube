@@ -3,6 +3,8 @@ import { Card, Modal, Empty } from "antd";
 import axios from "axios";
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
+import { Helmet } from "react-helmet";
+
 // import { update_videos_action } from "../../../_actions/update_videos_action";
 const { Meta } = Card;
 
@@ -26,23 +28,25 @@ class MyVideos extends Component {
   }
 
   getVideos = () => {
-    axios.get("/api/video/getVideos").then((response) => {
-      if (response.data.success) {
-        const myVideo = response.data.videos.filter(
-          (user) => user.writer._id === localStorage.getItem("userId")
-        );
-        this.setState({
-          videos: myVideo,
-        });
-      } else {
-        alert("Failed to get Videos");
-      }
-    });
+    axios
+      .get(`${process.env.REACT_APP_API}/video/getVideos`)
+      .then((response) => {
+        if (response.data.success) {
+          const myVideo = response.data.videos.filter(
+            (user) => user.writer._id === localStorage.getItem("userId")
+          );
+          this.setState({
+            videos: myVideo,
+          });
+        } else {
+          alert("Failed to get Videos");
+        }
+      });
   };
 
   deleteVideo = (id) => {
     axios
-      .delete(`/api/video/delete/${id}`)
+      .delete(`${process.env.REACT_APP_API}/video/delete/${id}`)
       .then((res) => {
         if (res.data) {
           alert("Deleted successfully!!!");
@@ -69,6 +73,11 @@ class MyVideos extends Component {
           width: "100%",
           padding: 20,
         }}>
+        <Helmet>
+          <meta charSet='utf-8' />
+          <title>My all uploaded videos</title>
+        </Helmet>
+
         <Modal
           title={this.state.title}
           centered
@@ -82,7 +91,7 @@ class MyVideos extends Component {
               background: "#000",
             }}
             autoPlay
-            src={`http://localhost:5000/${this.state.filePath}`}
+            src={`http://localhost:8000/${this.state.filePath}`}
             controls></video>
         </Modal>
         <h4 className='title'>Your videos</h4>
@@ -111,7 +120,7 @@ class MyVideos extends Component {
                         this.playVideo(video.filePath, video.title)
                       }
                       alt={video.title}
-                      src={`http://localhost:5000/${video.thumbnail}`}
+                      src={`http://localhost:8000/${video.thumbnail}`}
                     />
                   }>
                   <Meta

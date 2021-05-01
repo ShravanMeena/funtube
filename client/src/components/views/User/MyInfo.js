@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Descriptions } from "antd";
 import axios from "axios";
+import { Helmet } from "react-helmet";
 export default class MyInfo extends Component {
   constructor() {
     super();
@@ -12,15 +13,17 @@ export default class MyInfo extends Component {
     const videoVariable = {
       userId: this.props.match.params.userId,
     };
-    axios.get("/api/users/userInfo", videoVariable).then((response) => {
-      if (response.data.success) {
-        this.setState({
-          user_info: response.data.userData,
-        });
-      } else {
-        alert("Failed to get video Info");
-      }
-    });
+    axios
+      .get(`${process.env.REACT_APP_API}/users/userInfo`, videoVariable)
+      .then((response) => {
+        if (response.data.success) {
+          this.setState({
+            user_info: response.data.userData,
+          });
+        } else {
+          alert("Failed to get video Info");
+        }
+      });
   }
 
   render() {
@@ -35,6 +38,11 @@ export default class MyInfo extends Component {
             <>
               <Descriptions.Item label='UserName'>
                 {user.name}
+
+                <Helmet>
+                  <meta charSet='utf-8' />
+                  <title>{user.name}</title>
+                </Helmet>
               </Descriptions.Item>
               <Descriptions.Item label='Email'>{user.email}</Descriptions.Item>
               <Descriptions.Item label='Role'>Admin</Descriptions.Item>

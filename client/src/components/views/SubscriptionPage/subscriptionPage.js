@@ -4,6 +4,7 @@ import axios from "axios";
 import moment from "moment";
 import "../Section/_home.scss";
 import { Card, Avatar, Row, Col, Empty, Spin } from "antd";
+import { Helmet } from "react-helmet";
 const { Meta } = Card;
 
 export default class LandingPage extends Component {
@@ -18,7 +19,10 @@ export default class LandingPage extends Component {
     let variable = { userFrom: localStorage.getItem("userId") };
 
     axios
-      .post("/api/video/getSubscriptionVideos", variable)
+      .post(
+        `${process.env.REACT_APP_API}/video/getSubscriptionVideos`,
+        variable
+      )
       .then((response) => {
         if (response.data.success) {
           this.setState({
@@ -50,14 +54,15 @@ export default class LandingPage extends Component {
       var seconds = Math.floor(video.duration - minutes * 60);
 
       return (
-        <Col className='cardContainer'>
+        <Col className='cardContainer' key={index}>
           <div style={{ position: "relative" }}>
             <a href={`/video/${video._id}`}>
               <img
                 className='imgFit'
                 alt='thumbnail'
-                src={`http://localhost:5000/${video.thumbnail}`}
+                src={`http://localhost:8000/${video.thumbnail}`}
               />
+
               <div
                 className=' duration'
                 style={{
@@ -98,6 +103,10 @@ export default class LandingPage extends Component {
     return (
       <>
         <div className='cardUpperMainContainer'>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>Subscription </title>
+          </Helmet>
           {this.state.videos.length === 0 ? (
             <Empty style={{ marginTop: 200 }} />
           ) : (

@@ -4,6 +4,8 @@ import { Card, Avatar, Row, Spin, Button } from "antd";
 import Comment from "./section/Comment";
 import axios from "axios";
 import { shuffle } from "lodash";
+import { Helmet } from "react-helmet";
+import CommentComponent from "./section/Comment";
 
 const { Meta } = Card;
 
@@ -123,33 +125,42 @@ export default class VideoDetails extends Component {
     const videoVariable = {
       videoId: this.props.match.params.videoId,
     };
-    axios.post("/api/video/getVideo", videoVariable).then((response) => {
-      if (response.data.success) {
-        this.setState({
-          video: response.data.video,
-        });
-      } else {
-        alert("Failed to get video Info");
-      }
-    });
+    axios
+      .post(`${process.env.REACT_APP_API}/video/getVideo`, videoVariable)
+      .then((response) => {
+        if (response.data.success) {
+          this.setState({
+            video: response.data.video,
+          });
+        } else {
+          alert("Failed to get video Info");
+        }
+      });
 
     // getallvideos
-    axios.get("/api/video/getVideos").then((response) => {
-      if (response.data.success) {
-        console.log(response.data.videos);
-        this.setState({
-          videos: shuffle(response.data.videos),
-        });
-      } else {
-        alert("Failed to get Videos");
-      }
-    });
+    axios
+      .get(`${process.env.REACT_APP_API}/video/getVideos`)
+      .then((response) => {
+        if (response.data.success) {
+          console.log(response.data.videos);
+          this.setState({
+            videos: shuffle(response.data.videos),
+          });
+        } else {
+          alert("Failed to get Videos");
+        }
+      });
   }
 
   render() {
     if (this.state.video.writer) {
       return (
         <div className='mainVideoDeatilsContainer'>
+          <Helmet>
+            <meta charSet='utf-8' />
+            <title>{this.state.video.title}</title>
+          </Helmet>
+
           <div className='videoDetailsContainer'>
             <div className='left'>
               <Card className='videoContainer'>
@@ -161,14 +172,14 @@ export default class VideoDetails extends Component {
                       height: "100%",
                       background: "#000",
                     }}
-                    src={`http://localhost:5000/${this.state.video.filePath}`}
+                    src={`http://localhost:8000/${this.state.video.filePath}`}
                     controls></video>
                 </div>
                 <div className='videoConatienrFooter'>
                   <Meta
                     avatar={
                       <Avatar
-                        src={`http://localhost:5000/${this.state.video.writer.image}`}
+                        src={`http://localhost:8000/${this.state.video.writer.image}`}
                       />
                     }
                     title={this.state.video.title}
@@ -188,7 +199,7 @@ export default class VideoDetails extends Component {
                       cover={
                         <img
                           alt={video.title}
-                          src={`http://localhost:5000/${video.thumbnail}`}
+                          src={`http://localhost:8000/${video.thumbnail}`}
                         />
                       }>
                       <div

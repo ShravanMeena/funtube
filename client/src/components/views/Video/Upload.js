@@ -84,31 +84,35 @@ class Create extends Component {
     console.log(files);
     formData.append("file", files[0]);
 
-    axios.post("/api/video/uploadfiles", formData, config).then((response) => {
-      if (response.data.success) {
-        let variable = {
-          filePath: response.data.filePath,
-          fileName: response.data.fileName,
-        };
-        this.setState({
-          filePath: response.data.filePath,
-        });
+    axios
+      .post(`${process.env.REACT_APP_API}/video/uploadfiles`, formData, config)
+      .then((response) => {
+        if (response.data.success) {
+          let variable = {
+            filePath: response.data.filePath,
+            fileName: response.data.fileName,
+          };
+          this.setState({
+            filePath: response.data.filePath,
+          });
 
-        //gerenate thumbnail with this filepath !
-        axios.post("/api/video/thumbnail", variable).then((response) => {
-          if (response.data.success) {
-            this.setState({
-              thumbPath: response.data.thumbsFilePath,
-              duration: response.data.fileDuration,
+          //gerenate thumbnail with this filepath !
+          axios
+            .post(`${process.env.REACT_APP_API}/video/thumbnail`, variable)
+            .then((response) => {
+              if (response.data.success) {
+                this.setState({
+                  thumbPath: response.data.thumbsFilePath,
+                  duration: response.data.fileDuration,
+                });
+              } else {
+                alert("Failed to make the thumbnails");
+              }
             });
-          } else {
-            alert("Failed to make the thumbnails");
-          }
-        });
-      } else {
-        alert("failed to save the video in server");
-      }
-    });
+        } else {
+          alert("failed to save the video in server");
+        }
+      });
   };
 
   onSubmit = (event) => {
@@ -148,14 +152,16 @@ class Create extends Component {
       thumbnail: this.state.thumbPath,
     };
 
-    axios.post("/api/video/uploadVideo", data).then((response) => {
-      if (response.data.success) {
-        alert("video Uploaded Successfully");
-        this.props.history.push("/my-videos");
-      } else {
-        alert("Failed to upload video");
-      }
-    });
+    axios
+      .post(`${process.env.REACT_APP_API}/video/uploadVideo`, data)
+      .then((response) => {
+        if (response.data.success) {
+          alert("video Uploaded Successfully");
+          this.props.history.push("/my-videos");
+        } else {
+          alert("Failed to upload video");
+        }
+      });
   };
 
   render() {

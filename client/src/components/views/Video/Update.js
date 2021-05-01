@@ -54,23 +54,25 @@ export default class Update extends Component {
     const videoVariable = {
       videoId: this.props.match.params.videoId,
     };
-    axios.post("/api/video/getVideo", videoVariable).then((response) => {
-      if (response.data.success) {
-        const video = response.data.video;
-        this.setState({
-          title: video.title,
-          description: video.description,
-          category: video.category,
-          publish: video.privacy,
-          filePath: video.filePath,
-          thumbPath: video.thumbnail,
-          duration: video.duration,
-          video: response.data.video,
-        });
-      } else {
-        alert("Failed to get video Info");
-      }
-    });
+    axios
+      .post(`${process.env.REACT_APP_API}/video/getVideo`, videoVariable)
+      .then((response) => {
+        if (response.data.success) {
+          const video = response.data.video;
+          this.setState({
+            title: video.title,
+            description: video.description,
+            category: video.category,
+            publish: video.privacy,
+            filePath: video.filePath,
+            thumbPath: video.thumbnail,
+            duration: video.duration,
+            video: response.data.video,
+          });
+        } else {
+          alert("Failed to get video Info");
+        }
+      });
   }
 
   onFinish = (values) => {
@@ -107,31 +109,33 @@ export default class Update extends Component {
     console.log(files);
     formData.append("file", files[0]);
 
-    axios.post("/api/video/uploadfiles", formData, config).then((response) => {
-      if (response.data.success) {
-        let variable = {
-          filePath: response.data.filePath,
-          fileName: response.data.fileName,
-        };
-        this.setState({
-          filePath: response.data.filePath,
-        });
+    axios
+      .post(`${process.env.REACT_APP_API}/video/uploadfiles`, formData, config)
+      .then((response) => {
+        if (response.data.success) {
+          let variable = {
+            filePath: response.data.filePath,
+            fileName: response.data.fileName,
+          };
+          this.setState({
+            filePath: response.data.filePath,
+          });
 
-        //gerenate thumbnail with this filepath !
-        axios.post("/api/video/thumbnail", variable).then((response) => {
-          if (response.data.success) {
-            this.setState({
-              thumbPath: response.data.thumbsFilePath,
-              duration: response.data.fileDuration,
-            });
-          } else {
-            alert("Failed to make the thumbnails");
-          }
-        });
-      } else {
-        alert("failed to save the video in server");
-      }
-    });
+          //gerenate thumbnail with this filepath !
+          axios.post("/api/video/thumbnail", variable).then((response) => {
+            if (response.data.success) {
+              this.setState({
+                thumbPath: response.data.thumbsFilePath,
+                duration: response.data.fileDuration,
+              });
+            } else {
+              alert("Failed to make the thumbnails");
+            }
+          });
+        } else {
+          alert("failed to save the video in server");
+        }
+      });
   };
 
   onSubmit = (event) => {
@@ -171,7 +175,10 @@ export default class Update extends Component {
     };
 
     axios
-      .put(`/api/video/update/${this.props.match.params.videoId}`, data)
+      .put(
+        `${process.env.REACT_APP_API}/video/update/${this.props.match.params.videoId}`,
+        data
+      )
       .then((response) => {
         if (response.data.success) {
           alert("video Uploaded Successfully");

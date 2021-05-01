@@ -15,19 +15,21 @@ export default class LandingPage extends Component {
     };
   }
   componentDidMount() {
-    axios.get("/api/video/getVideos").then((response) => {
-      if (response.data.success) {
-        const withoutMyVideo = response.data.videos.filter(
-          (user) => user.writer._id != localStorage.getItem("userId")
-        );
+    axios
+      .get(`${process.env.REACT_APP_API}/video/getVideos`)
+      .then((response) => {
+        if (response.data.success) {
+          // const withoutMyVideo = response.data.videos.filter(
+          //   (user) => user.writer._id != localStorage.getItem("userId")
+          // );
 
-        this.setState({
-          videos: withoutMyVideo,
-        });
-      } else {
-        alert("Failed to get Videos");
-      }
-    });
+          this.setState({
+            videos: response.data.videos,
+          });
+        } else {
+          alert("Failed to get Videos");
+        }
+      });
   }
   render() {
     const renderCards = this.state.videos.map((video, index) => {
@@ -35,13 +37,13 @@ export default class LandingPage extends Component {
       var seconds = Math.floor(video.duration - minutes * 60);
 
       return (
-        <Col className='cardContainer'>
+        <Col className='cardContainer' key={index}>
           <div style={{ position: "relative" }}>
             <a href={`/video/${video._id}`}>
               <img
                 className='imgFit'
                 alt='thumbnail'
-                src={`http://localhost:5000/${video.thumbnail}`}
+                src={`http://localhost:8000/${video.thumbnail}`}
               />
               <div
                 className=' duration'

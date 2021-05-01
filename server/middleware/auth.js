@@ -1,17 +1,19 @@
-const { User } = require('../models/User');
+const { User } = require("../models/User");
 
 let auth = (req, res, next) => {
-  let token = req.cookies.w_auth;
+  // let token = req.cookies.w_auth;
+  let id = req.body.id;
 
-  User.findByToken(token, (err, user) => {
+  User.findById(id, (err, user) => {
     if (err) throw err;
+
     if (!user)
       return res.json({
         isAuth: false,
-        error: true
+        error: true,
       });
 
-    req.token = token;
+    // req.token = token;
     req.user = user;
     next();
   });
