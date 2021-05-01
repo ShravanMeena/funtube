@@ -60,7 +60,7 @@ export default class LandingPage extends Component {
               <img
                 className='imgFit'
                 alt='thumbnail'
-                src={`http://localhost:8000/${video.thumbnail}`}
+                src={`${process.env.REACT_APP_FOR_IMAGE}/${video.thumbnail}`}
               />
 
               <div

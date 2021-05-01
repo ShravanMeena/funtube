@@ -204,7 +204,7 @@ class Create extends Component {
             {this.state.thumbPath !== "" && (
               <div style={{ marginTop: 20, marginBottom: 20 }}>
                 <img
-                  src={`http://localhost:5000/${this.state.thumbPath}`}
+                  src={`${process.env.REACT_APP_FOR_IMAGE}/${this.state.thumbPath}`}
                   alt='haha'
                 />
               </div>
@@ -242,7 +242,7 @@ class Create extends Component {
                   <div>
                     <img
                       style={{ borderRadius: 5 }}
-                      src={`http://localhost:5000/${this.state.thumbPath}`}
+                      src={`${process.env.REACT_APP_FOR_IMAGE}/${this.state.thumbPath}`}
                       alt='haha'
                     />
                   </div>

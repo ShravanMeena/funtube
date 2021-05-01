@@ -11,19 +11,21 @@ export default class MyInfo extends Component {
   }
   componentDidMount() {
     const videoVariable = {
-      userId: this.props.match.params.userId,
+      userId: localStorage.getItem("userId"),
     };
-    axios
-      .get(`${process.env.REACT_APP_API}/users/userInfo`, videoVariable)
-      .then((response) => {
-        if (response.data.success) {
-          this.setState({
-            user_info: response.data.userData,
-          });
-        } else {
-          alert("Failed to get video Info");
-        }
-      });
+    try {
+      axios
+        .get(`${process.env.REACT_APP_API}/users/userInfo`, videoVariable)
+        .then((response) => {
+          if (response.data.success) {
+            this.setState({
+              user_info: response.data.userData,
+            });
+          } else {
+            alert("Failed User Info");
+          }
+        });
+    } catch (error) {}
   }
 
   render() {

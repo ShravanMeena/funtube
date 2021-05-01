@@ -91,7 +91,7 @@ class MyVideos extends Component {
               background: "#000",
             }}
             autoPlay
-            src={`http://localhost:8000/${this.state.filePath}`}
+            src={`${process.env.REACT_APP_FOR_IMAGE}/${this.state.filePath}`}
             controls></video>
         </Modal>
         <h4 className='title'>Your videos</h4>
@@ -120,7 +120,7 @@ class MyVideos extends Component {
                         this.playVideo(video.filePath, video.title)
                       }
                       alt={video.title}
-                      src={`http://localhost:8000/${video.thumbnail}`}
+                      src={`${process.env.REACT_APP_FOR_IMAGE}/${video.thumbnail}`}
                     />
                   }>
                   <Meta
