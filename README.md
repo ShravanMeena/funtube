@@ -3,7 +3,7 @@
 
 `It is not live because heroku provide only five website at time. so that is the simple reason and if u want to check to preview visuals. Please go to mention youtube link below`
 
-# Youtube : [Preview](other_file.md)
+# Youtube : [Preview](https://www.youtube.com/watch?v=bOD1pzG2T58)
 
 Hello, My Friends  
 Thank you for having interest in this repository ! 
