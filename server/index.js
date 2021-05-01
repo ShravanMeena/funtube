@@ -6,8 +6,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 
-const config = require("./config/key");
-require("dotenv").config();
+// const config = require("./config/key");
 
 // const mongoose = require("mongoose");
 // mongoose
@@ -15,10 +14,12 @@ require("dotenv").config();
 //   .then(() => console.log("DB connected"))
 //   .catch(err => console.error(err));
 
-const mongoose = require("mongoose");
+app.use(cors());
+app.use(express.json());
 
+const mongoose = require("mongoose");
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect("mongodb://localhost:27017/youtube", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -27,14 +28,9 @@ mongoose
   .then(() => console.log("MongoDB Connected..."))
   .catch((err) => console.log(err));
 
-app.use(cors());
-
 //to not get any deprecation warning or error
 //support parsing of application/x-www-form-urlencoded post data
-app.use(bodyParser.urlencoded({ extended: true }));
-//to get json data
 // support parsing of application/json type post data
-app.use(bodyParser.json());
 app.use(cookieParser());
 
 app.use("/api/users", require("./routes/users"));
@@ -46,16 +42,16 @@ app.use("/api/subscribe", require("./routes/subscribe"));
 app.use("/uploads", express.static("uploads"));
 
 // Serve static assets if in production
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  // All the javascript and css files will be read and served from this folder
-  app.use(express.static("client/build"));
+// if (process.env.NODE_ENV === "production") {
+//   // Set static folder
+//   // All the javascript and css files will be read and served from this folder
+//   app.use(express.static("client/build"));
 
-  // index.html for all page routes    html or routing and naviagtion
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
-  });
-}
+//   // index.html for all page routes    html or routing and naviagtion
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
+//   });
+// }
 
 const port = process.env.PORT || 8000;
 

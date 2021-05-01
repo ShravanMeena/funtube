@@ -41,7 +41,6 @@ export function logoutUser() {
   const request = axios
     .get(`${process.env.REACT_APP_API}/${USER_SERVER}/logout`)
     .then((response) => response.data);
-
   return {
     type: LOGOUT_USER,
     payload: request,
